@@ -1,6 +1,47 @@
 require('dotenv').config();
 const nodemailer = require('nodemailer');
-const express = require('express');
+const nodemailer = require("nodemailer");
+
+module.exports = async (req, res) => {
+  if (req.method !== "POST") {
+    return res.status(405).send({ error: "Method not allowed" });
+  }
+
+  const { name, email, message } = req.body;
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
+    }
+  });
+
+  const adminMail = {
+    from: process.env.EMAIL_USER,
+    to: process.env.EMAIL_USER,
+    subject: "Message from Portfolio Contact Form",
+    text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
+  };
+
+  const confirmationMail = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: "Confirmation Email",
+    text: `Hello ${name},\n\nThank you for reaching out! I have received your message and will get back to you shortly.\n\nBest regards,\nJosephine Mwenswa`
+  };
+
+  try {
+    await transporter.sendMail(adminMail);
+    await transporter.sendMail(confirmationMail);
+    res.status(200).send({ message: "✅ Message sent! Confirmation email sent too." });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send({ error: "❌ Something went wrong." });
+  }
+};
+
+/*const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require("cors");
 const path = require("path");
@@ -57,11 +98,7 @@ app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
 
-
-
-
-
-
+*/
 
 
 /*function sendConfirmation(name, email) {
