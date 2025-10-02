@@ -58,7 +58,11 @@ exports.handler = async (event, context) => {
       headers: {
         "Access-Control-Allow-Origin": "https://josephinemwende.github.io",
       },
-      body: JSON.stringify({ message: "✅ Message sent successfully!" })
+      body: JSON.stringify({
+      status: "success",
+      title: "Message Sent 🎉",
+      message: `Thank you, ${name}! Your message has been sent successfully. A confirmation email has been sent to ${email}.`
+    })
     };
   } catch (error) {
     console.error("Error:", error);
@@ -67,7 +71,11 @@ exports.handler = async (event, context) => {
       headers: {
         "Access-Control-Allow-Origin": "https://josephinemwende.github.io",
       },
-      body: JSON.stringify({ error: "❌ Failed to send message." })
+      body: JSON.stringify({
+      status: "error",
+      title: "Message Failed",
+      message: errorMessage
+    })
     };
   }
 };
