@@ -1,16 +1,18 @@
 require('dotenv').config();
 const nodemailer = require("nodemailer");
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "https://josephinemwende.github.io",
+  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS"
+};
+
 exports.handler = async (event, context) => {
   // ✅ Handle preflight (CORS)
   if (event.httpMethod === "OPTIONS") {
     return {
       statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "https://josephinemwende.github.io", // restrict to your domain
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Methods": "POST, OPTIONS"
-      },
+      headers: corsHeaders,
       body: "OK"
     };
   }
@@ -18,9 +20,7 @@ exports.handler = async (event, context) => {
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
-      headers: {
-        "Access-Control-Allow-Origin": "https://josephinemwende.github.io",
-      },
+      headers: corsHeaders,
       body: JSON.stringify({ error: "Method not allowed" })
     };
   }
@@ -55,9 +55,7 @@ exports.handler = async (event, context) => {
 
     return {
       statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "https://josephinemwende.github.io",
-      },
+      headers: corHeaders,
       body: JSON.stringify({
       status: "success",
       title: "Message Sent 🎉",
@@ -68,13 +66,11 @@ exports.handler = async (event, context) => {
     console.error("Error:", error);
     return {
       statusCode: 500,
-      headers: {
-        "Access-Control-Allow-Origin": "https://josephinemwende.github.io",
-      },
+      headers: corsHeaders,
       body: JSON.stringify({
       status: "error",
       title: "Message Failed",
-      message: errorMessage
+      message: error.message
     })
     };
   }
