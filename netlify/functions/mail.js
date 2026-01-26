@@ -8,7 +8,6 @@ const corsHeaders = {
 };
 
 exports.handler = async (event, context) => {
-  // ✅ Handle preflight (CORS)
   if (event.httpMethod === "OPTIONS") {
     return {
       statusCode: 200,
@@ -58,7 +57,7 @@ exports.handler = async (event, context) => {
       headers: corHeaders,
       body: JSON.stringify({
       status: "success",
-      title: "Message Sent 🎉",
+      title: "Message Sent",
       message: `Thank you, ${name}! Your message has been sent successfully. A confirmation email has been sent to ${email}.`
     })
     };
